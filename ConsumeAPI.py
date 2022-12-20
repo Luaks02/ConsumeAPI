@@ -1,20 +1,30 @@
-#import xlwings as xw
+#from openpyxl import workbook, load_workbook
+import requests
+from bs4 import BeautifulSoup
+#import pandas as pd
 
-#Abrindo planilha
-#wb = xw.Book("smart_haus.xlsm")
-#sheet = wb.sheets["Dados_Tecnico-Projeto"]
+site = requests.get("https://www.aldo.com.br/busca/energia-solar/aldo-solar-on-grid/deye-microinversor/gerador-de-energia-solar-deye-micro-inversor-sem-estrutura")
+soup = BeautifulSoup(site.content,"html.parser")
 
-#sheet.range("A1").value = "Teste"
+testao = []
 
-#wb.save("smart_haus.xlsm")
+teste = soup.select("img")
+for test in teste:
+    src = test.get("src")
+    alt = test.get("alt")
+    testao.append({"src":src,"alt":alt})
 
-from openpyxl import workbook, load_workbook
+print(testao)
 
-wb = load_workbook(filename="Smart_Haus.xlsm", read_only=False,keep_vba=True)
-ws = wb["Dados_Tecnico-Projeto"]
 
-ws["A1"].value = "Teste"
+#Colhendo informações
 
-wb.save("Smart_Haus.xlsm")
+
+#wb = load_workbook(filename="Smart_Haus.xlsm", read_only=False,keep_vba=True)
+#ws = wb["Dados_Tecnico-Projeto"]
+
+#ws["A1"].value = "Teste"
+
+#wb.save("Smart_Haus.xlsm")
 
 
