@@ -3,18 +3,16 @@ import requests
 from bs4 import BeautifulSoup
 #import pandas as pd
 
-site = requests.get("https://www.aldo.com.br/busca/energia-solar/aldo-solar-on-grid/deye-microinversor/gerador-de-energia-solar-deye-micro-inversor-sem-estrutura")
-soup = BeautifulSoup(site.content,"html.parser")
+site = requests.get("https://www.aldo.com.br/categoria/energia-solar?filtro=143").text
+soup = BeautifulSoup(site,"html.parser")
 
-testao = []
+teste = soup.body.div.div.div.main.div.div
 
-teste = soup.select("img")
-for test in teste:
-    src = test.get("src")
-    alt = test.get("alt")
-    testao.append({"src":src,"alt":alt})
 
-print(testao)
+print(teste)
+
+
+
 
 
 #Colhendo informações
