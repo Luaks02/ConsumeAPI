@@ -1,19 +1,24 @@
 #from openpyxl import workbook, load_workbook
-import requests
-from bs4 import BeautifulSoup
 #import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 
-site = requests.get("https://www.aldo.com.br/categoria/energia-solar?filtro=143").text
-soup = BeautifulSoup(site,"html.parser")
+options = Options()
+options.headless = True
+options.add_argument("--window-size=1920,1200")
 
-teste = soup.body.div.div.div.main.div.div
-
-
-print(teste)
-
+driver = webdriver.Chrome(options=options)
+driver.get("https://www.aldo.com.br/categoria/energia-solar?filtro=143")
 
 
+rowshoplist = driver.find_element(By.XPATH, "//div[@class='row shoplist']/ul/*")
 
+print(rowshoplist.tag_name)
+
+
+
+driver.quit()
 
 #Colhendo informações
 
