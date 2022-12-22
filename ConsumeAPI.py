@@ -3,6 +3,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 options = Options()
 options.headless = True
@@ -11,10 +12,13 @@ options.add_argument("--window-size=1920,1200")
 driver = webdriver.Chrome(options=options)
 driver.get("https://www.aldo.com.br/categoria/energia-solar?filtro=143")
 
+driver.implicitly_wait(10)
 
 rowshoplist = driver.find_element(By.XPATH, "//div[@class='row shoplist']/ul/*")
+rowshoplist.click()
+description = driver.find_element(By.XPATH, "//div[@id='description']/br")
 
-print(rowshoplist.tag_name)
+print(description.text)
 
 
 
