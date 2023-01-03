@@ -16,9 +16,10 @@ driver.implicitly_wait(5)
 
 rowshoplist = driver.find_element(By.XPATH, "//div[@class='row shoplist']/ul/*")
 rowshoplist.click()
-description = driver.find_element(By.XPATH, "//div[@id='description']/strong [contains(text(), 'é composto por')]/following-sibling::br[2]")
+driver.implicitly_wait(5)
+description = driver.find_elements(By.XPATH, "//div[@id='description']")[0].text
 
-print(description.text)
+print(description)
 
 
 
