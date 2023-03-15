@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-import time
+import subprocess
 
 #Abrindo a planilha de controle
 wb = load_workbook(filename="Smart_Haus.xlsm", read_only=False,keep_vba=True)
@@ -20,15 +20,12 @@ options.add_argument("--window-size=1920,1200")
 
 driver = webdriver.Chrome(options=options)
 driver.get(site)
-
-try:
-    driver.implicitly_wait(10)
-    rowshoplist = driver.find_element(By.XPATH, "//div[@class='row shoplist']/ul/*")
-    rowshoplist.click()
-    driver.implicitly_wait(5)
-    description = driver.find_elements(By.XPATH, "//div[@id='description']")[0].text
-except NameError:
-    print("Não carregou a página, tentar novamente!")
+driver.implicitly_wait(10)
+rowshoplist = driver.find_element(By.XPATH, "//div[@class='row shoplist']/ul/*")
+kit_info = driver.find_element(By.XPATH, "//div[@class='row shoplist']/ul/div").text
+rowshoplist.click()
+driver.implicitly_wait(5)
+description = driver.find_elements(By.XPATH, "//div[@id='description']")[0].text
 
 #Filtrando informações colhidas
 listed_description = []
@@ -48,6 +45,16 @@ for index,desc in enumerate(listed_description):
     if desc[0:14] == "Regulamentação":
         fim = index-2
 
+listed_kit_info = []
+listed_kit_info = kit_info.splitlines()
+
+valor = listed_kit_info[3].split() 
+valor = str(valor)[4:-2]
+
+kwp = listed_kit_info[2].split()
+kwp = kwp[1][:-3]
+
+
 #Enviando informações para a planilha de controle
 
 numero = 3
@@ -55,7 +62,10 @@ numero = 3
 ws["B2"].value = "Equipamentos"
 ws["C2"].value = "Qnt"
 
-t0 = time.time()
+if ws2["F1"].value is None:
+    ws2["F1"].value = valor
+
+ws2["C2"].value = kwp
 
 for linha in range(inicio,fim):
     material = listed_description[linha].split()
@@ -113,8 +123,6 @@ for linha in range(inicio,fim):
 
     numero += 1
 
-t1 = time.time()
-
 ws["B" + str(numero)].value = "Instalação"
 ws["C" + str(numero)].value = 1
 ws2["I27"].value = int(area)
@@ -122,9 +130,18 @@ ws2["J27"].value = int(area)*int(peso)
 
 #Fechando sistemas
 
-print(t1-t0)
-
 wb.save("Smart_Haus.xlsm")
 driver.quit()
 
+#Abrindo planilha
 
+file = "Smart_Haus.xlsm"
+excel = r"C:\Program Files\Microsoft Office 15\root\office15\excel.exe"
+
+p = subprocess.Popen([excel,file])
+
+print("Aperte Enter para fechar o script(feche e salve a planilha primeiro).")
+
+input()
+
+ 
