@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-import subprocess
+import os
 
 #Abrindo a planilha de controle
 wb = load_workbook(filename="Smart_Haus.xlsm", read_only=False,keep_vba=True)
@@ -135,10 +135,12 @@ driver.quit()
 
 #Abrindo planilha
 
-file = "Smart_Haus.xlsm"
-excel = r"C:\Program Files\Microsoft Office 15\root\office15\excel.exe"
+#file = "Smart_Haus.xlsm"
+#excel = r"C:\Program Files\Microsoft Office 15\root\office15\excel.exe"
 
-p = subprocess.Popen([excel,file])
+#p = subprocess.Popen([excel,file])
+
+os.startfile("Smart_Haus.xlsm")
 
 print("Aperte Enter para fechar o script(feche e salve a planilha primeiro).")
 
